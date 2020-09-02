@@ -20,6 +20,12 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.id)
     // eslint-disable-next-line arrow-parens
-    .then(card => res.status(200).send({ data: card }))
+    .then((card) => {
+      if (!card) {
+        res.status(404).send({ message: 'Нет карточки с таким ID' });
+      } else {
+        res.status(200).send({ data: card });
+      }
+    })
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };

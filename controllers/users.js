@@ -18,6 +18,12 @@ module.exports.createUser = (req, res) => {
 module.exports.getUsersById = (req, res) => {
   User.findById(req.params.id)
     // eslint-disable-next-line arrow-parens
-    .then(user => res.send({ data: user }))
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ message: 'Нет пользователя с таким ID' });
+      } else {
+        res.status(200).send({ data: user });
+      }
+    })
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
