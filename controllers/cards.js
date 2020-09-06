@@ -14,7 +14,13 @@ module.exports.createCard = (req, res) => {
   Card.create({ name, link, owner: userId })
     // eslint-disable-next-line arrow-parens
     .then(card => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
+      } else {
+        res.status(500).send({ message: 'Произошла ошибка' });
+      }
+    });
 };
 
 module.exports.deleteCard = (req, res) => {
@@ -27,5 +33,11 @@ module.exports.deleteCard = (req, res) => {
         res.status(200).send({ data: card });
       }
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
+      } else {
+        res.status(500).send({ message: 'Произошла ошибка' });
+      }
+    });
 };
